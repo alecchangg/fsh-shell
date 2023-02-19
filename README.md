@@ -1,2 +1,6 @@
 # fsh-shell
-UNIX shell from scratch
+Simple UNIX shell from scratch
+
+Current builtin commands: cd, ls, mkdir, help, exit
+
+

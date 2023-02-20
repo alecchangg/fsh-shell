@@ -1,6 +1,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <linux/limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,6 +10,12 @@
 #define FSH_RL_BUFSIZE 1024
 #define FSH_TOK_BUFSIZE 64
 #define FSH_TOK_DELIM " \t\r\n\a"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+#define BOLD_RESET "\x1B[0m"
+#define BOLD "\x1B[1m"
 
 int fsh_cd(char **args);
 int fsh_help(char **args);
@@ -180,12 +187,23 @@ char *fsh_read_line(void) {
     return line;
 }
 
+void fsh_cwd() {
+    char buf[PATH_MAX];
+    if (getcwd(buf, sizeof(buf)) != NULL) {
+        printf(ANSI_COLOR_BLUE "%s" ANSI_COLOR_RESET, buf);
+    }
+    else {
+        perror("fsh_cwd");
+    }
+}
+
 void fsh_loop(void) {
     char *line;
     char **args;
     int status;
 
-    do { 
+    do {
+        fsh_cwd();
         printf("> ");
         line = fsh_read_line();
         args = fsh_split_line(line);

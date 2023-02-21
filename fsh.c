@@ -190,7 +190,7 @@ char *fsh_read_line(void) {
 void fsh_cwd() {
     char buf[PATH_MAX];
     if (getcwd(buf, sizeof(buf)) != NULL) {
-        printf(ANSI_COLOR_BLUE "%s" ANSI_COLOR_RESET, buf);
+        printf(ANSI_COLOR_BLUE "%s%s%s" ANSI_COLOR_RESET, BOLD, buf, BOLD_RESET);
     }
     else {
         perror("fsh_cwd");
